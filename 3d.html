@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
+    <title>VIP Prize Bond System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0a0a0a;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0.9) 90%);
+            color: white;
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(20, 20, 20, 0.9);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+            border-radius: 10px;
+            border: 2px solid #D4AF37;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                #D4AF37 20%, 
+                #FFD700 50%, 
+                #D4AF37 80%, 
+                transparent 100%);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            padding-top: 10px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            display: block;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            margin: 10px auto;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group input {
+            flex: 1 1 150px;
+            min-width: 0;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            text-align: center;
+            border: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Premium Gold Casino Inputs (A1-A4) */
+        #num1, #num2, #num3, #num4 {
+            background: linear-gradient(135deg, #F9E79F 0%, #D4AF37 50%, #F9E79F 100%);
+            color: #5E2C04;
+            border: 2px solid #FFD700;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #num1::placeholder, #num2::placeholder, #num3::placeholder, #num4::placeholder {
+            color: #7D5A2A;
+            opacity: 0.7;
+        }
+        
+        #num1::before, #num2::before, #num3::before, #num4::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, 
+                rgba(255,215,0,0.3) 0%, 
+                rgba(255,215,0,0) 50%, 
+                rgba(255,215,0,0.3) 100%);
+            z-index: -1;
+            border-radius: 12px;
+        }
+        
+        /* Luxury Silver Casino Inputs (B1-B3) */
+        #num5, #num6, #num7 {
+            background: linear-gradient(135deg, #E6E6E6 0%, #C0C0C0 50%, #E6E6E6 100%);
+            color: #333;
+            border: 2px solid #C0C0C0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #num5::placeholder, #num6::placeholder, #num7::placeholder {
+            color: #555;
+            opacity: 0.7;
+        }
+        
+        #num5::before, #num6::before, #num7::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, 
+                rgba(192,192,192,0.3) 0%, 
+                rgba(192,192,192,0) 50%, 
+                rgba(192,192,192,0.3) 100%);
+            z-index: -1;
+            border-radius: 12px;
+        }
+        
+        /* Hover effects */
+        #num1:hover, #num2:hover, #num3:hover, #num4:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        #num5:hover, #num6:hover, #num7:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 192, 192, 0.4);
+        }
+        
+        /* Focus effects */
+        #num1:focus, #num2:focus, #num3:focus, #num4:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.5);
+        }
+        
+        #num5:focus, #num6:focus, #num7:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.5);
+        }
+        
+        /* Casino-style dropdown select */
+        select {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='gold'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #4a6491;
+            cursor: pointer;
+        }
+        
+        select:hover {
+            background: linear-gradient(135deg, #4a6491 0%, #2c3e50 100%);
+            box-shadow: 0 8px 25px rgba(74, 100, 145, 0.4);
+        }
+        
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 100, 145, 0.5);
+        }
+        
+        /* Casino-style dropdown options */
+        select option {
+            padding: 12px;
+            background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Different colored options for visual hierarchy */
+        select option:nth-child(1) {
+            background: linear-gradient(135deg, #5E2C04 0%, #7D5A2A 100%);
+            color: #FFD700;
+        }
+        
+        select option:nth-child(2) {
+            background: linear-gradient(135deg, #4a6491 0%, #2c3e50 100%);
+            color: white;
+        }
+        
+        select option:nth-child(3) {
+            background: linear-gradient(135deg, #3a1c71 0%, #5b2c90 100%);
+            color: #C0C0C0;
+        }
+        
+        select option:nth-child(4) {
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            color: #FFD700;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+            cursor: pointer;
+            color: #222;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #FFD700;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.3s;
+        }
+        
+        button:hover::after {
+            left: 100%;
+        }
+        
+        .operation-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .operation-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: linear-gradient(135deg, #333 0%, #222 100%);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid #555;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .operation-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+            transition: all 0.5s;
+        }
+        
+        .operation-btn:hover::before {
+            left: 100%;
+        }
+        
+        .operation-btn.active {
+            background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+            color: #222;
+            border: 1px solid #FFD700;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+        
+        .custom-range {
+            display: none;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .custom-range input {
+            flex: 1;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #555;
+            background: #444;
+            color: white;
+        }
+        
+        .result-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            border: 1px solid #444;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .common-numbers {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #5E2C04 0%, #7D5A2A 100%);
+            border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid #D4AF37;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .code-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            text-align: left;
+            overflow-x: auto;
+            border: 1px solid #444;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .highlight {
+            background-color: gold;
+            color: black;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+            box-shadow: 0 0 5px rgba(255,215,0,0.7);
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .casino-loader {
+            width: 90%;
+            max-width: 400px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+            border: 2px solid #D4AF37;
+        }
+        
+        .slot-machine {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .slot-reel {
+            width: 25%;
+            max-width: 90px;
+            height: 120px;
+            background: #2a2a2a;
+            border: 3px solid #FFD700;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        
+        .slot-reel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(255,215,0,0.1), rgba(255,215,0,0));
+            z-index: 1;
+        }
+        
+        .slot-symbol {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: gold;
+            animation: slotSpin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            text-shadow: 0 0 10px gold;
+        }
+        
+        @keyframes slotSpin {
+            0% { transform: translateY(-200%); }
+            100% { transform: translateY(200%); }
+        }
+        
+        .win-light {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,215,0,0.5) 0%, transparent 70%);
+            animation: lightPulse 1.5s infinite;
+            z-index: 0;
+        }
+        
+        @keyframes lightPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        .casino-text {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            color: gold;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px gold;
+            font-size: 16px;
+            animation: textGlow 2s infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px gold; }
+            to { text-shadow: 0 0 20px gold, 0 0 30px #D4AF37; }
+        }
+        
+        /* Vertical digit arrangement styles */
+        .cm-container {
+            margin-bottom: 30px;
+            background: rgba(40, 40, 40, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #555;
+        }
+        
+        .cm-title {
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: gold;
+            text-shadow: 0 0 5px rgba(255,215,0,0.5);
+            display: flex;
+            align-items: center;
+        }
+        
+        .cm-title::before {
+            content: "★";
+            margin-right: 10px;
+            color: #FFD700;
+        }
+        
+        .code-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .code-label {
+            min-width: 120px;
+            font-family: monospace;
+            color: gold;
+            margin-right: 10px;
+        }
+        
+        .digit-columns {
+            display: flex;
+            gap: 3px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .digit-column {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .digit-box {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #555;
+            border-radius: 3px;
+            font-size: 14px;
+            font-family: monospace;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+        
+        .digit-box.highlight {
+            background-color: gold;
+            color: black;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255,215,0,0.7);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .decimal-point-box {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-family: monospace;
+            color: gold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .input-group input {
+                flex: 1 1 100%;
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .custom-range {
+                flex-direction: column;
+            }
+            
+            .digit-box, .decimal-point-box {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .code-label {
+                min-width: 100px;
+                font-size: 14px;
+            }
+            
+            select, button {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .input-group input, select, button {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .slot-reel {
+                height: 80px;
+            }
+            
+            .slot-symbol {
+                height: 80px;
+                font-size: 30px;
+            }
+            
+            .casino-text {
+                font-size: 12px;
+                bottom: 10px;
+                letter-spacing: 1px;
+            }
+            
+            .digit-box, .decimal-point-box {
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+            }
+            
+            .code-label {
+                min-width: 80px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VIP Prize Bond System</h1>
+
+        <!-- A1-A4 in one row -->
+        <div class="input-group">
+            <input type="text" id="num1" placeholder="A1 Number" value="859893" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" id="num2" placeholder="A2 Number" value="876095" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" id="num3" placeholder="A3 Number" value="281066" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" id="num4" placeholder="A4 Number" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        </div>
+
+        <!-- B1-B3 in second row -->
+        <div class="input-group">
+            <input type="text" id="num5" placeholder="B1 Number" value="876" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" id="num6" placeholder="B2 Number" value="281" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" id="num7" placeholder="B3 Number" value="664" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        </div>
+
+        <!-- Operation Selector -->
+        <div class="operation-selector">
+            <div id="divisionBtn" class="operation-btn active" onclick="setOperation('division')">Division</div>
+            <div id="multiplicationBtn" class="operation-btn" onclick="setOperation('multiplication')">Multiplication</div>
+        </div>
+
+        <label>💰 Select Prize Range:</label>
+        <select id="range" onchange="toggleCustomRange()">
+            <option value="100000-1000000">1 to 10 Lakh</option>
+            <option value="1000000-5000000">10 Lakh to 50 Lakh</option>
+            <option value="5000000-10000000">50 Lakh to 1 Crore</option>
+            <option value="custom">Custom Range</option>
+        </select>
+
+        <div class="custom-range" id="customRangeInputs">
+            <input type="text" id="customMin" placeholder="Minimum Value" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" id="customMax" placeholder="Maximum Value" pattern="[0-9]*" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        </div>
+
+        <button onclick="calculate()">🔍 Calculate</button>
+
+        <div class="result-section" id="results-container">
+            <div id="commonNumbers" class="common-numbers"></div>
+            <div id="codeResults" class="code-result"></div>
+        </div>
+    </div>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="casino-loader">
+            <div class="win-light"></div>
+            <div class="slot-machine">
+                <div class="slot-reel">
+                    <div class="slot-symbol">🍒</div>
+                    <div class="slot-symbol">7️⃣</div>
+                    <div class="slot-symbol">💰</div>
+                </div>
+                <div class="slot-reel">
+                    <div class="slot-symbol">⭐</div>
+                    <div class="slot-symbol">🍒</div>
+                    <div class="slot-symbol">🎰</div>
+                </div>
+                <div class="slot-reel">
+                    <div class="slot-symbol">💎</div>
+                    <div class="slot-symbol">🎲</div>
+                    <div class="slot-symbol">7️⃣</div>
+                </div>
+            </div>
+            <div class="casino-text">Calculating Winning Code!</div>
+        </div>
+    </div>
+
+    <script>
+        
+'use strict';const _0x5ee214=_0x5bc4;(function(_0x156f72,_0x59c3cc){const _0x4a681=_0x5bc4,_0x1b0c44=_0x156f72();while(!![]){try{const _0x11607a=-parseInt(_0x4a681(0xae))/0x1*(-parseInt(_0x4a681(0xc0))/0x2)+parseInt(_0x4a681(0xba))/0x3*(parseInt(_0x4a681(0x9c))/0x4)+parseInt(_0x4a681(0x6f))/0x5+parseInt(_0x4a681(0x83))/0x6*(parseInt(_0x4a681(0x8a))/0x7)+-parseInt(_0x4a681(0x88))/0x8*(-parseInt(_0x4a681(0x78))/0x9)+-parseInt(_0x4a681(0x7a))/0xa*(parseInt(_0x4a681(0xb7))/0xb)+parseInt(_0x4a681(0xc3))/0xc*(-parseInt(_0x4a681(0xb8))/0xd);if(_0x11607a===_0x59c3cc)break;else _0x1b0c44['push'](_0x1b0c44['shift']());}catch(_0x5e3e9b){_0x1b0c44['push'](_0x1b0c44['shift']());}}}(_0x1f2b,0x2c9cf));function _0x1f2b(){const _0x4b822d=['display','\x20Common\x20Numbers\x20Found</h3>','classList','Please\x20close\x20Developer\x20Tools\x20to\x20continue.','code-label','27NcgVLL','active','389170khHonM','isArray','number','map','includes','hostname','num4','innerWidth','divisionBtn','6xBPYOI','style','add','<h3>','indexOf','417512DBIrSQ','forEach','1750637OgSoFn','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22digits-','toggleCustomRange','value','string','decimal-point-box','replace','range','num','toggle','preventDefault','getElementById','test.gmitweb.com','loadingOverlay','metaKey','outerHeight','digit-column','\x20=\x20','4MVTzbN','key','className','Enter','none','div','textContent','customMax','digits-','error','addEventListener','https://','Invalid\x20input','altKey','setOperation','init','length','appendChild','7642kbQXxA','abs','This\x20script\x20can\x20only\x20run\x20on\x20','multiplicationBtn','customRangeInputs','calculate','Result\x20','outerWidth','Please\x20enter\x20valid\x20custom\x20range!','11LoIClD','3649646XtAoif','highlight','439917KGtAor','innerHeight','division','toString','codeResults','filter','34wSAugK','floor','custom','24CgrcNu','shiftKey','flex','location','multiplication','Developer\x20tools\x20are\x20restricted\x20on\x20this\x20page.','push','createElement','499625bBhkKC','digit-box','keydown','ctrlKey'];_0x1f2b=function(){return _0x4b822d;};return _0x1f2b();}function _0x5bc4(_0x290057,_0x49b4c2){const _0x1f2bea=_0x1f2b();return _0x5bc4=function(_0x5bc4b0,_0x4a5f){_0x5bc4b0=_0x5bc4b0-0x6b;let _0x342182=_0x1f2bea[_0x5bc4b0];return _0x342182;},_0x5bc4(_0x290057,_0x49b4c2);}const VIPPrizeBondSystem=(function(){let _0x5e96ac='division';function _0x385b18(_0x28361a){const _0x5650cd=_0x5bc4;if(_0x28361a!==_0x5650cd(0xbc)&&_0x28361a!==_0x5650cd(0x6b)){console[_0x5650cd(0xa5)]('Invalid\x20operation');return;}_0x5e96ac=_0x28361a,document[_0x5650cd(0x95)](_0x5650cd(0x82))[_0x5650cd(0x75)][_0x5650cd(0x93)]('active',_0x28361a===_0x5650cd(0xbc)),document[_0x5650cd(0x95)](_0x5650cd(0xb1))[_0x5650cd(0x75)]['toggle'](_0x5650cd(0x79),_0x28361a===_0x5650cd(0x6b));}function _0x31c4ad(){const _0x1dfaa7=_0x5bc4,_0x8d6d11=document[_0x1dfaa7(0x95)](_0x1dfaa7(0x91));if(!_0x8d6d11)return;document[_0x1dfaa7(0x95)](_0x1dfaa7(0xb2))[_0x1dfaa7(0x84)][_0x1dfaa7(0x73)]=_0x8d6d11[_0x1dfaa7(0x8d)]===_0x1dfaa7(0xc2)?_0x1dfaa7(0xc5):_0x1dfaa7(0xa0);}function _0x59ae2b(_0xe3ed90,_0x3fd0c2,_0x56bbfc=0x10){const _0x568ebf=_0x5bc4;if(typeof _0xe3ed90!==_0x568ebf(0x7c)||typeof _0x3fd0c2!==_0x568ebf(0x7c))return _0x568ebf(0xa8);if(_0x3fd0c2===0x0)return'Infinity';const _0x5f3111=_0xe3ed90<0x0!==_0x3fd0c2<0x0;_0xe3ed90=Math[_0x568ebf(0xaf)](_0xe3ed90),_0x3fd0c2=Math[_0x568ebf(0xaf)](_0x3fd0c2);let _0x154b5b='',_0x5287a9=_0xe3ed90;_0x154b5b+=Math[_0x568ebf(0xc1)](_0x5287a9/_0x3fd0c2)[_0x568ebf(0xbd)](),_0x5287a9=_0x5287a9%_0x3fd0c2;if(_0x5287a9!==0x0&&_0x56bbfc>0x0){_0x154b5b+='.';let _0x292aae=0x0;while(_0x5287a9!==0x0&&_0x292aae<_0x56bbfc){_0x5287a9*=0xa;const _0x17a3bb=Math[_0x568ebf(0xc1)](_0x5287a9/_0x3fd0c2);_0x154b5b+=_0x17a3bb['toString'](),_0x5287a9=_0x5287a9%_0x3fd0c2,_0x292aae++;}}return _0x5f3111&&_0x154b5b!=='0'&&(_0x154b5b='-'+_0x154b5b),_0x154b5b;}function _0x3d7044(_0x295eaa,_0xc95481){const _0x8d168d=_0x5bc4;if(typeof _0x295eaa!==_0x8d168d(0x7c)||typeof _0xc95481!==_0x8d168d(0x7c))return _0x8d168d(0xa8);return(_0x295eaa*_0xc95481)[_0x8d168d(0xbd)]();}function _0x23fdb5(_0x3229ee){const _0xce4ac2=_0x5bc4;if(typeof _0x3229ee!=='string')return'';return _0x3229ee[_0xce4ac2(0x90)](/[^0-9]/g,'');}function _0x161e3c(_0x5d7d66,_0x1113e8,_0xb78a6a,_0x45da9c,_0x307815,_0x330020=![]){const _0x344bca=_0x5bc4,_0x2292eb=document['createElement'](_0x344bca(0xa1));_0x2292eb[_0x344bca(0x9e)]='code-row';const _0x335b85=document[_0x344bca(0x6e)](_0x344bca(0xa1));_0x335b85[_0x344bca(0x9e)]=_0x344bca(0x77),_0x335b85[_0x344bca(0xa2)]=_0x5d7d66+_0x344bca(0x9b)+_0x1113e8+(_0x330020?'×':'/')+_0xb78a6a,_0x2292eb['appendChild'](_0x335b85);const _0x4fb7e7=document[_0x344bca(0x6e)]('div');_0x4fb7e7[_0x344bca(0x9e)]='digit-columns';for(let _0x5d39bb=0x0;_0x5d39bb<_0x45da9c[_0x344bca(0xac)];_0x5d39bb++){const _0x5dd176=document[_0x344bca(0x6e)]('div');_0x5dd176[_0x344bca(0x9e)]=_0x344bca(0x9a);const _0x8e85e0=_0x45da9c[_0x5d39bb];if(_0x8e85e0==='.'&&!_0x330020){const _0xfc9df5=document['createElement']('div');_0xfc9df5[_0x344bca(0x9e)]=_0x344bca(0x8f),_0xfc9df5['textContent']='.',_0x5dd176[_0x344bca(0xad)](_0xfc9df5);}else{const _0x299634=document[_0x344bca(0x6e)]('div');_0x299634['className']=_0x344bca(0x70),_0x299634[_0x344bca(0xa2)]=_0x8e85e0,Array[_0x344bca(0x7b)](_0x307815)&&_0x307815[_0x344bca(0x89)](_0x5637b9=>{const _0x892a8d=_0x344bca;if(_0x5637b9&&typeof _0x5637b9===_0x892a8d(0x8e)&&_0x45da9c[_0x892a8d(0x7e)](_0x5637b9)){const _0xd82c09=_0x45da9c[_0x892a8d(0x87)](_0x5637b9);_0x5d39bb>=_0xd82c09&&_0x5d39bb<_0xd82c09+_0x5637b9[_0x892a8d(0xac)]&&_0x299634[_0x892a8d(0x75)][_0x892a8d(0x85)](_0x892a8d(0xb9));}}),_0x5dd176[_0x344bca(0xad)](_0x299634);}_0x4fb7e7['appendChild'](_0x5dd176);}return _0x2292eb[_0x344bca(0xad)](_0x4fb7e7),_0x2292eb;}function _0x19af94(){const _0x44d9cb=_0x5bc4,_0x30d734=document[_0x44d9cb(0x95)]('loadingOverlay');if(_0x30d734)_0x30d734[_0x44d9cb(0x84)][_0x44d9cb(0x73)]=_0x44d9cb(0xc5);}function _0x41ced2(){const _0x2ca1f7=_0x5bc4,_0x2b00e4=document['getElementById'](_0x2ca1f7(0x97));if(_0x2b00e4)_0x2b00e4['style'][_0x2ca1f7(0x73)]=_0x2ca1f7(0xa0);}function _0x2b001f(){_0x19af94(),setTimeout(()=>{const _0x3e3a64=_0x5bc4;try{const _0x3951fc=[0x1,0x2,0x3,0x4]['map'](_0x257aae=>{const _0x188887=_0x5bc4,_0x1686a2=document[_0x188887(0x95)](_0x188887(0x92)+_0x257aae);if(!_0x1686a2)return null;const _0x1b2127=_0x23fdb5(_0x1686a2[_0x188887(0x8d)]);return _0x1b2127?parseFloat(_0x1b2127):null;}),_0x4bc8d0=[0x5,0x6,0x7][_0x3e3a64(0x7d)](_0x147cf6=>{const _0x358f5a=_0x3e3a64,_0x574e42=document[_0x358f5a(0x95)](_0x358f5a(0x92)+_0x147cf6);return _0x574e42?_0x23fdb5(_0x574e42[_0x358f5a(0x8d)])||null:null;}),_0x239faf=document[_0x3e3a64(0x95)](_0x3e3a64(0x80))?parseFloat(_0x23fdb5(document[_0x3e3a64(0x95)](_0x3e3a64(0x80))[_0x3e3a64(0x8d)])):null;let _0x26c88d,_0x2fa9ef;const _0x224b5d=document[_0x3e3a64(0x95)](_0x3e3a64(0x91));if(!_0x224b5d)return;const _0x2f145b=_0x224b5d[_0x3e3a64(0x8d)];if(_0x2f145b===_0x3e3a64(0xc2)){const _0x11ac83=document[_0x3e3a64(0x95)]('customMin'),_0x105ca0=document[_0x3e3a64(0x95)](_0x3e3a64(0xa3));if(!_0x11ac83||!_0x105ca0)return;_0x26c88d=parseInt(_0x23fdb5(_0x11ac83[_0x3e3a64(0x8d)])),_0x2fa9ef=parseInt(_0x23fdb5(_0x105ca0['value']));if(isNaN(_0x26c88d)||isNaN(_0x2fa9ef)||_0x26c88d>=_0x2fa9ef){alert(_0x3e3a64(0xb6));return;}}else[_0x26c88d,_0x2fa9ef]=_0x2f145b['split']('-')[_0x3e3a64(0x7d)](Number);let _0x532ea7=[];for(let _0x204681=_0x26c88d;_0x204681<=_0x2fa9ef;_0x204681++){let _0x53d211=!![];for(let _0x9ee787=0x0;_0x9ee787<0x3;_0x9ee787++){if(_0x3951fc[_0x9ee787]&&_0x4bc8d0[_0x9ee787]){let _0x15b70a;_0x5e96ac===_0x3e3a64(0xbc)?_0x15b70a=_0x59ae2b(_0x3951fc[_0x9ee787],_0x204681,0x10):_0x15b70a=_0x3d7044(_0x3951fc[_0x9ee787],_0x204681);if(typeof _0x15b70a!==_0x3e3a64(0x8e)||!_0x15b70a['includes'](_0x4bc8d0[_0x9ee787])){_0x53d211=![];break;}}}_0x53d211&&_0x532ea7[_0x3e3a64(0x6d)](_0x204681);}const _0x2bc183=document[_0x3e3a64(0x95)]('commonNumbers');_0x2bc183&&(_0x2bc183['innerHTML']=_0x3e3a64(0x86)+_0x532ea7[_0x3e3a64(0xac)]+_0x3e3a64(0x74));let _0x34b4ae='';_0x532ea7[_0x3e3a64(0x89)]((_0xd56e,_0x275184)=>{const _0x393715=_0x3e3a64;_0x34b4ae+='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cm-container\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cm-title\x22>'+_0xd56e+_0x393715(0x8b)+_0x275184+'\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20';});const _0x5dc7aa=document[_0x3e3a64(0x95)](_0x3e3a64(0xbe));_0x5dc7aa&&(_0x5dc7aa['innerHTML']=_0x34b4ae),_0x532ea7['forEach']((_0x143a24,_0x466373)=>{const _0x4030b1=_0x3e3a64,_0x48b3f2=document[_0x4030b1(0x95)](_0x4030b1(0xa4)+_0x466373);if(!_0x48b3f2)return;const _0x36a0c8=_0x4bc8d0[_0x4030b1(0xbf)](_0x706d06=>_0x706d06!==null);_0x3951fc[_0x4030b1(0x89)]((_0x2b4f98,_0x278899)=>{const _0x27779f=_0x4030b1;if(_0x2b4f98){let _0x8da260,_0x264093;_0x5e96ac===_0x27779f(0xbc)?(_0x8da260=_0x59ae2b(_0x2b4f98,_0x143a24,0x10),_0x264093=_0x27779f(0xb4)+(_0x278899+0x1)):(_0x8da260=_0x3d7044(_0x2b4f98,_0x143a24),_0x264093=_0x27779f(0xb4)+(_0x278899+0x1));const _0x33fbd2=_0x161e3c(_0x264093,_0x2b4f98,_0x143a24,_0x8da260,_0x36a0c8,_0x5e96ac==='multiplication');_0x48b3f2['appendChild'](_0x33fbd2);}});});}catch(_0x3a53cf){console['error']('Error\x20in\x20calculation:',_0x3a53cf);}finally{_0x41ced2();}},0x32);}function _0x28afd7(){const _0x2e2c34=_0x5bc4;document[_0x2e2c34(0xa6)](_0x2e2c34(0x71),function(_0x125392){const _0x3a2a1b=_0x2e2c34;_0x125392[_0x3a2a1b(0x9d)]===_0x3a2a1b(0x9f)&&(_0x125392['preventDefault'](),_0x2b001f());}),_0x31c4ad();}return{'setOperation':_0x385b18,'toggleCustomRange':_0x31c4ad,'calculate':_0x2b001f,'init':_0x28afd7};}());document[_0x5ee214(0xa6)]('DOMContentLoaded',function(){const _0x37b9a8=_0x5ee214;VIPPrizeBondSystem[_0x37b9a8(0xab)]();}),window[_0x5ee214(0xaa)]=VIPPrizeBondSystem[_0x5ee214(0xaa)],window[_0x5ee214(0x8c)]=VIPPrizeBondSystem[_0x5ee214(0x8c)],window[_0x5ee214(0xb3)]=VIPPrizeBondSystem[_0x5ee214(0xb3)],document['addEventListener']('contextmenu',_0x2c4024=>_0x2c4024['preventDefault']()),document[_0x5ee214(0xa6)](_0x5ee214(0x71),_0x11d2b4=>{const _0x3239df=_0x5ee214;(_0x11d2b4[_0x3239df(0x9d)]==='F12'||_0x11d2b4[_0x3239df(0x72)]&&_0x11d2b4['shiftKey']&&_0x11d2b4[_0x3239df(0x9d)]==='I'||_0x11d2b4[_0x3239df(0x72)]&&_0x11d2b4[_0x3239df(0xc4)]&&_0x11d2b4[_0x3239df(0x9d)]==='J'||_0x11d2b4[_0x3239df(0x72)]&&_0x11d2b4[_0x3239df(0x9d)]==='U'||_0x11d2b4[_0x3239df(0x98)]&&_0x11d2b4[_0x3239df(0xa9)]&&_0x11d2b4[_0x3239df(0x9d)]==='I')&&(_0x11d2b4[_0x3239df(0x94)](),alert(_0x3239df(0x6c)));});let devToolsWarningShown=![];(function checkDevTools(){const _0x5560ce=_0x5ee214,_0x54d7e9=0xa0,_0x4b2659=window[_0x5560ce(0xb5)]-window[_0x5560ce(0x81)]>_0x54d7e9,_0x411294=window[_0x5560ce(0x99)]-window[_0x5560ce(0xbb)]>_0x54d7e9;(_0x4b2659||_0x411294)&&!devToolsWarningShown&&(devToolsWarningShown=!![],alert(_0x5560ce(0x76))),setTimeout(checkDevTools,0x3e8);}());const allowedDomain=_0x5ee214(0x96),currentDomain=window[_0x5ee214(0xc6)][_0x5ee214(0x7f)];if(currentDomain!==allowedDomain){window[_0x5ee214(0xc6)]['href']=_0x5ee214(0xa7)+allowedDomain;throw new Error(_0x5ee214(0xb0)+allowedDomain);}
+    </script>
+</body>
+</html>
